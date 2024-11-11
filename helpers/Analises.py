@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import os 
 import plotly.io as pio
-from datetime import datetime
+from datetime import datetime  # VER filtro filial, precisa ser ESTADO 
 
 hoje = datetime.now().date()
 

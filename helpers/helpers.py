@@ -477,8 +477,8 @@ def clean_data_campari_p4p():
     df_final['TIPO'] = df_final['Tipo Estabelecimento'].apply(map_tipo)
 
 
-    df_SC = df_final[df_final['Filial'] == 6].reset_index(drop=True)
-    df_PR = df_final[df_final['Filial'] != 6].reset_index(drop=True)
+    df_SC = df_final[df_final['UF'] == "SC"].reset_index(drop=True)
+    df_PR = df_final[df_final['UF'] != "PR"].reset_index(drop=True)
 
     volumes_PR = df_PR.groupby('MARCA')['Volumes'].sum().reset_index()
     volumes_SC = df_SC.groupby('MARCA')['Volumes'].sum().reset_index()
@@ -1350,8 +1350,8 @@ def clean_data_pernod_p4p():
     df_final['Canal'] = df_final.apply(alterar_tipo, axis=1)
 
     # flitrar filial
-    df_SC = df_final[df_final['Filial'] == 6]
-    df_PR = df_final[df_final['Filial'] != 6]
+    df_SC = df_final[df_final['SC'] == 6]
+    df_PR = df_final[df_final['PR'] != 6]
 
 
     # realizar análise PR
