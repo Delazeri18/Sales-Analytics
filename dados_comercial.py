@@ -931,7 +931,7 @@ if st.session_state["authentication_status"]:
             # Exibindo conteúdo em cada aba
             with tabs[0]:
                 st.markdown("<h1 style='text-align: center;color: #b8141b;' >Campari Club</h1>", unsafe_allow_html=True)
-                volume_pr, volume_sc, positivacao_PR_CC, positivacao_SC_CC, total_volume_sky_pr, total_volume_sky_sc, volume_premium_pr, volume_premium_sc= clean_data_campari_club()
+                volume_pr, volume_sc, positivacao_PR_CC, positivacao_SC_CC,volume_premium_pr, volume_premium_sc = clean_data_campari_club()
                 col1, col2, col3 = st.columns([15,1,15])
                 
                 with col1:
@@ -947,8 +947,7 @@ if st.session_state["authentication_status"]:
                     st.divider()
                     cards_2(
                         'Volume Total', volume_pr, 9864, 
-                        'Volume Skyy', total_volume_sky_pr, 610,
-                        'Volume Premium', volume_premium_pr, 550
+                        'Volume Premium', volume_premium_pr, 400
                     )
 
                     style_metric_cards()
@@ -969,7 +968,7 @@ if st.session_state["authentication_status"]:
                     st.divider()
                     cards_2(
                         'Volume Total', volume_sc, 6897, 
-                        'Volume Skyy', total_volume_sky_sc, 270
+                        'Volume Premium', volume_premium_sc , 390
                     )
                     style_metric_cards()
 

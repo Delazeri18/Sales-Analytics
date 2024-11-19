@@ -233,51 +233,47 @@ def load_data_faseamento():
 # limpa e cria gráficos
 def clean_data_campari_club():
     
-    df = pd.read_excel("relatorios\\Template_CC.xlsx")
-    df_sem_primeira_linha = df.drop(index=0)
-    novos_nomes_colunas = df_sem_primeira_linha.iloc[0]
-    df_sem_primeira_linha.columns = novos_nomes_colunas
-    df_final = df_sem_primeira_linha[1:].reset_index(drop=True)
+    df_final = pd.read_excel("relatorios\\Template_CC.xlsx")
 
-        #mapeando
+    #mapeando
     mapeamento_produtos = {
-            816: "APEROL",
-            9636: "CAMPARI",
-            9637: "CAMPARI",
-            423: "SAGATIBA",
-            683: "SKYY",
-            2805: "SKYY",
-            8889: "SAGATIBA",
-            1209: "SAGATIBA",
-            4339: "CAMPARI",
-            8815: "PREMIUM",
-            657: "POPULAR CAMPARI",
-            6195: "POPULAR CAMPARI",
-            2522:"PREMIUM",
-            10063: "PREMIUM",
-            10064: "PREMIUM",
-            10065: "PREMIUM",
-            3423: 'PREMIUM',
-            539: "PREMIUM",
-            925: 'PREMIUM',
-            2503 : 'PREMIUM',
-            2804 : 'PREMIUM',
-            832 : 'PREMIUM',
-            2520: 'PREMIUM',
-            1522 : 'PREMIUM',
-            3426 : 'PREMIUM',
-            8733 : 'PREMIUM',
-            1399 : 'PREMIUM',
-            1398 : 'PREMIUM',
-            4327 : 'PREMIUM',
-            2523 : "PREMIUM",
-            2521 : "PREMIUM",
-            716 : 'PREMIUM',
-            715 : 'PREMIUM',
-            8825 : 'PREMIUM',
-            693: 'POPULAR CAMPARI',
-            2522 : 'POPULAR CAMPARI',
-            388 : 'POPULAR CAMPARI'
+        816: "APEROL",
+        9636: "CAMPARI",
+        9637: "CAMPARI",
+        423: "SAGATIBA",
+        683: "SKYY",
+        2805: "SKYY",
+        8889: "SAGATIBA",
+        1209: "SAGATIBA",
+        4339: "CAMPARI",
+        8815: "PREMIUM",
+        657: "POPULAR CAMPARI",
+        6195: "POPULAR CAMPARI",
+        2522:"PREMIUM",
+        10063: "PREMIUM",
+        10064: "PREMIUM",
+        10065: "PREMIUM",
+        3423: 'PREMIUM',
+        539: "PREMIUM",
+        925: 'PREMIUM',
+        2503 : 'PREMIUM',
+        2804 : 'PREMIUM',
+        832 : 'PREMIUM',
+        2520: 'PREMIUM',
+        1522 : 'PREMIUM',
+        3426 : 'PREMIUM',
+        8733 : 'PREMIUM',
+        1399 : 'PREMIUM',
+        1398 : 'PREMIUM',
+        4327 : 'PREMIUM',
+        2523 : "PREMIUM",
+        2521 : "PREMIUM",
+        716 : 'PREMIUM',
+        715 : 'PREMIUM',
+        8825 : 'PREMIUM',
+        693: 'POPULAR CAMPARI',
+        2522 : 'POPULAR CAMPARI',
+        388 : 'POPULAR CAMPARI'
     }
 
     df_final['Marca'] = df_final['Produto'].map(mapeamento_produtos)
@@ -293,8 +289,8 @@ def clean_data_campari_club():
     df_final['Marca'] = df_final['Produto'].apply(produtos_map)
 
         # filtrando filial
-    df_SC = df_final[df_final['Filial'] == 6].reset_index(drop=True)
-    df_PR = df_final[df_final['Filial'] != 6].reset_index(drop=True)
+    df_SC = df_final[df_final['UF (Cliente)'] == 'SC'].reset_index(drop=True)
+    df_PR = df_final[df_final['UF (Cliente)'] == 'PR'].reset_index(drop=True)
 
     positivacao_PR = df_PR.groupby('Marca')['Cliente'].nunique().reset_index()
     positivacao_SC = df_SC.groupby('Marca')['Cliente'].nunique().reset_index()
@@ -310,10 +306,6 @@ def clean_data_campari_club():
 
     volume_premium_pr = df_PR[df_PR['Marca'] == 'PREMIUM']['Volumes'].sum()
     volume_premium_sc = df_SC[df_SC['Marca'] == 'PREMIUM']['Volumes'].sum()
-
-    #volume Ske e sagatiba 
-    total_volume_sky_pr = df_PR[df_PR['Marca'] == 'SKYY']['Volumes'].sum()
-    total_volume_sky_sc = df_SC[df_SC['Marca'] == 'SKYY']['Volumes'].sum()
 
     # Quarteto:
      # Lista de todas as marcas que estamos interessados
@@ -420,14 +412,11 @@ def clean_data_campari_club():
 
 
 
-    return volume_pr, volume_sc, positivacao_PR_CC, positivacao_SC_CC, total_volume_sky_pr, total_volume_sky_sc, volume_premium_pr, volume_premium_sc
+    return volume_pr, volume_sc, positivacao_PR_CC, positivacao_SC_CC,volume_premium_pr, volume_premium_sc
 
 def clean_data_campari_p4p():
-    df = pd.read_excel("relatorios\\Campari_p4p.xlsx")
-    df_sem_primeira_linha = df.drop(index=0)
-    novos_nomes_colunas = df_sem_primeira_linha.iloc[0]
-    df_sem_primeira_linha.columns = novos_nomes_colunas
-    df_final = df_sem_primeira_linha[1:].reset_index(drop=True)    
+    df_final = pd.read_excel("relatorios\\Campari_p4p.xlsx")
+ 
     
     mapeamento_produtos = {
         816: "APEROL",
@@ -477,8 +466,8 @@ def clean_data_campari_p4p():
     df_final['TIPO'] = df_final['Tipo Estabelecimento'].apply(map_tipo)
 
 
-    df_SC = df_final[df_final['UF'] == "SC"].reset_index(drop=True)
-    df_PR = df_final[df_final['UF'] != "PR"].reset_index(drop=True)
+    df_SC = df_final[df_final['UF (Cliente)'] == "SC"].reset_index(drop=True)
+    df_PR = df_final[df_final['UF (Cliente)'] == "PR"].reset_index(drop=True)
 
     volumes_PR = df_PR.groupby('MARCA')['Volumes'].sum().reset_index()
     volumes_SC = df_SC.groupby('MARCA')['Volumes'].sum().reset_index()
