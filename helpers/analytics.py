@@ -1339,8 +1339,8 @@ def clean_data_pernod_p4p():
     df_final['Canal'] = df_final.apply(alterar_tipo, axis=1)
 
     # flitrar filial
-    df_SC = df_final[df_final['SC'] == 6]
-    df_PR = df_final[df_final['PR'] != 6]
+    df_SC = df_final[df_final['Filial'] == 6]
+    df_PR = df_final[df_final['Filial'] != 6]
 
 
     # realizar análise PR
@@ -1505,8 +1505,53 @@ def clean_data_pernod_p4p():
 
     return df_on_trade_marca,df_off_trade_marca,df_eventos_marca, df_Volume_sc_main, df_off_trade_marca_volume_sc, df_positivacao_sc_main, resultados_on_pr, resultados_off_pr, resultados_eventos_pr,resultados_jameson_off_pr,resultados_jameson_eventos_pr,resultados_jameson_on_pr,resultado_posi_off_pr, resultado_posi_on_pr
 
+def clean_data_hnk():
+    df = pd.read_excel('relatorios\\reunião_hnk.xlsx')
 
 
+    clientes_sem_class = df.groupby('Mês')['Cliente'].nunique().reset_index()
+
+    meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+
+    clientes_sem_class['Mês'] = pd.Categorical(clientes_sem_class['Mês'], categories=meses, ordered=True)
+
+    # Ordenando o DataFrame
+    clientes_por_mes = clientes_sem_class.sort_values('Mês')
+
+    julho_clientes_posi_geral = clientes_por_mes.loc[clientes_por_mes['Mês'] == 'Julho', 'Cliente'].values[0]
+    outubro_clientes_posi_geral = clientes_por_mes.loc[clientes_por_mes['Mês'] == 'Outubro', 'Cliente'].values[0]
+
+
+    # Calcular o crescimento absoluto
+    crescimento_absoluto_posi_geral = outubro_clientes_posi_geral - julho_clientes_posi_geral
+
+    # Calcular a média de crescimento percentual
+    crescimento_percentual_posi_geral = (crescimento_absoluto_posi_geral / julho_clientes_posi_geral) * 100
+    
+
+    volume_sem_clas = df.groupby('Mês')['Hecto total'].sum().reset_index()
+
+    volume_sem_clas['Mês'] = pd.Categorical(volume_sem_clas['Mês'], categories=meses, ordered=True)
+
+    # Ordenando o DataFrame
+    volume_por_mes = volume_sem_clas.sort_values('Mês')
+
+
+    # Calcular a média de crescimento percentual
+
+    julho_volumes_geral = volume_por_mes.loc[volume_por_mes['Mês'] == 'Julho', 'Hecto total'].values[0]
+    outubro_volumes_geral = volume_por_mes.loc[volume_por_mes['Mês'] == 'Outubro', 'Hecto total'].values[0]
+
+    # Calcular o crescimento absoluto para Volumes
+    crescimento_absoluto_volumes_geral = outubro_volumes_geral - julho_volumes_geral
+
+    # Calcular a média de crescimento percentual para Volumes
+    crescimento_percentual_volumes_geral = (crescimento_absoluto_volumes_geral / julho_volumes_geral) * 100
+
+    crescimento_percentual_volumes_geral.round(2)
+
+    return clientes_por_mes, crescimento_percentual_posi_geral, volume_por_mes, crescimento_percentual_volumes_geral
 
 
 def Mandar_share():

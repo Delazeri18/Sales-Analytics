@@ -2,11 +2,12 @@ import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
 import streamlit.components.v1 as components
-from helpers.helpers import *
+from helpers.analytics import *
 import time
-import streamlit_authenticator as stauth #t
+import streamlit_authenticator as stauth 
 import yaml
 from yaml.loader import SafeLoader 
+from helpers.plotly import *
 
 #Layout
 st.set_page_config(layout="wide")
@@ -30,7 +31,7 @@ authenticator.login()
 if st.session_state["authentication_status"]:
     authenticator.logout()
 
-    # estilos 
+    # estilos
     st.markdown("""
         <style>
         div[data-testid="stVerticalBlock"] > div[data-testid="element-container"] {
@@ -917,7 +918,7 @@ if st.session_state["authentication_status"]:
         
     if aba_selecionada == 'Indústrias': 
         st.sidebar.title("Filtros")
-        Industrias = st.sidebar.selectbox('Selecione a Industria:', options=['Pernod', 'Campari', 'Jack Daniels', 'Beam Suntory', 'Concha Y Toro'])
+        Industrias = st.sidebar.selectbox('Selecione a Industria:', options=['Pernod', 'Campari', 'Jack Daniels', 'Beam Suntory', 'Concha Y Toro', 'Heineken'])
 
         if Industrias == 'Campari':
             with st.spinner('Carregando...'):
@@ -1142,12 +1143,6 @@ if st.session_state["authentication_status"]:
                             # data frme 
                             # print pizza e card 
                             
-
-
-
-                
-
-
         if Industrias == 'Jack Daniels':
             with st.spinner('Carregando...'):
                 time.sleep(4)
@@ -1213,8 +1208,45 @@ if st.session_state["authentication_status"]:
                                         min_value=0,
                                         max_value=100,),
                                     }, hide_index=True)
+        if Industrias == 'Heineken':
+            with st.spinner('Carregando...'):
+                time.sleep(2)
+            st.success("Pronto!")            
 
+            st.markdown("<h1 style='text-align: center;color: green;' >Indústria Heineken 🏭</h1>", unsafe_allow_html=True)
+                # Criando as abas
+            tabs = st.tabs(["Análise Geral", "Análise Vendedores", "Análise Cidades"])
 
+            with tabs[0]:
+                st.markdown("<h1 style='text-align: center;color: green;' >Análise Geral</h1>", unsafe_allow_html=True)
+                col1, col2, col3 = st.columns([15,1,15])   
+                fig_posi_geral, fig_volume_geral = graph_hnk()
+
+                with col1:
+                    st.write("## Análise Posistivação")
+                    st.plotly_chart(fig_posi_geral)
+                    st.divider()
+                    st.metric(
+                        label="Crescimento de Clientes (%)", 
+                        value=f"{clean_data_hnk()[1]:.2f}%",  # Acessando o segundo valor da tupla
+                        delta="📈"
+                    )
+                    style_metric_cards()
+
+                    with col2:
+                        st.markdown("<div style='height: 800px; width: 2px; background-color: black;'></div>", unsafe_allow_html=True)
+
+                    with col3:
+                    # Exibir gráfico
+                        st.write("## Análise Volume")
+                        st.plotly_chart(fig_volume_geral)
+                        st.divider()
+                        st.metric(
+                            label="Crescimento Em Hectolitros (%)", 
+                            value=f"{clean_data_hnk()[3]:.2f}%",
+                            delta="📈"
+                        ) 
+                        style_metric_cards()
 
 
             
