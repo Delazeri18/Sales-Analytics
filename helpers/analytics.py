@@ -1505,8 +1505,8 @@ def clean_data_pernod_p4p():
 
     return df_on_trade_marca,df_off_trade_marca,df_eventos_marca, df_Volume_sc_main, df_off_trade_marca_volume_sc, df_positivacao_sc_main, resultados_on_pr, resultados_off_pr, resultados_eventos_pr,resultados_jameson_off_pr,resultados_jameson_eventos_pr,resultados_jameson_on_pr,resultado_posi_off_pr, resultado_posi_on_pr
 
-def clean_data_hnk():
-    df = pd.read_excel('relatorios\\reunião_hnk.xlsx')
+def clean_data_hnk_geral():
+    df = pd.read_excel('relatorios\\Hnk_geral.xlsx')
 
 
     clientes_sem_class = df.groupby('Mês')['Cliente'].nunique().reset_index()
@@ -1551,8 +1551,45 @@ def clean_data_hnk():
 
     crescimento_percentual_volumes_geral.round(2)
 
-    return clientes_por_mes, crescimento_percentual_posi_geral, volume_por_mes, crescimento_percentual_volumes_geral
+    # análises de top 15 clientes com maiores volumes. 
+    df_top15 = df.groupby(['Cliente', 'Nome Cliente'])['Volumes'].sum().reset_index()
 
+    df_top_15 = df_top15.sort_values(by='Volumes', ascending=False)
+
+    # 3. Selecionar os top 15 clientes
+    df_top_15 = df_top_15.head(15)
+
+    df_top_15 = df_top_15.reset_index(drop=True)
+    df_top_15.index = df_top_15.index + 1  # Ajusta o índice para começar em 1
+
+    df_top_15['Cliente'] = df_top_15['Cliente'].astype(str)
+
+    return clientes_por_mes, crescimento_percentual_posi_geral, volume_por_mes, crescimento_percentual_volumes_geral, df_top_15
+
+def clean_data_hnk_mes():
+    df = pd.read_excel('relatorios\\Hnk_Mes.xlsx')
+
+    # positivações produtos
+    produtos_posi = df.groupby('Nome Produto')['Cliente'].nunique().reset_index()
+
+    # Renomeando as colunas para facilitar o entendimento
+    produtos_posi.columns = ['Produto', 'Positivação']
+
+    # positivações cidades
+    cidades_posi = df.groupby('Nome Cidade')['Cliente'].nunique().reset_index()
+
+    # Renomeando as colunas para facilitar o entendimento
+    cidades_posi.columns = ['Cidade', 'Positivação']
+
+    # positivações vendedores
+    vendedores_posi = df.groupby('Nome Vendedor')['Cliente'].nunique().reset_index()
+
+    # Renomeando as colunas para facilitar o entendimento
+    vendedores_posi.columns = ['Vendedor', 'Positivação']
+
+    return produtos_posi , cidades_posi, vendedores_posi
+
+    
 
 def Mandar_share():
    # Configurações

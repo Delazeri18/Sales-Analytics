@@ -6,8 +6,8 @@ import plotly.graph_objects as go
 
 
 def graph_hnk():
-    clientes_por_mes = clean_data_hnk()[0]
-    volume_por_mes = clean_data_hnk()[2]
+    clientes_por_mes = clean_data_hnk_geral()[0]
+    volume_por_mes = clean_data_hnk_geral()[2]
 
     fig_posi_geral = go.Figure()
 

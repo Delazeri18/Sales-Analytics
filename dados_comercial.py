@@ -1215,7 +1215,7 @@ if st.session_state["authentication_status"]:
 
             st.markdown("<h1 style='text-align: center;color: green;' >Indústria Heineken 🏭</h1>", unsafe_allow_html=True)
                 # Criando as abas
-            tabs = st.tabs(["Análise Geral", "Análise Vendedores", "Análise Cidades"])
+            tabs = st.tabs(["Análise Geral", "Resumo Mensal"]) 
 
             with tabs[0]:
                 st.markdown("<h1 style='text-align: center;color: green;' >Análise Geral</h1>", unsafe_allow_html=True)
@@ -1228,10 +1228,16 @@ if st.session_state["authentication_status"]:
                     st.divider()
                     st.metric(
                         label="Crescimento de Clientes (%)", 
-                        value=f"{clean_data_hnk()[1]:.2f}%",  # Acessando o segundo valor da tupla
+                        value=f"{clean_data_hnk_geral()[1]:.2f}%",  # Acessando o segundo valor da tupla
                         delta="📈"
                     )
                     style_metric_cards()
+
+                    st.divider()
+
+
+                    st.write("## Análise top 15 Cliente X Volume")
+                    st.dataframe(clean_data_hnk_geral()[4])
 
                     with col2:
                         st.markdown("<div style='height: 800px; width: 2px; background-color: black;'></div>", unsafe_allow_html=True)
@@ -1243,10 +1249,36 @@ if st.session_state["authentication_status"]:
                         st.divider()
                         st.metric(
                             label="Crescimento Em Hectolitros (%)", 
-                            value=f"{clean_data_hnk()[3]:.2f}%",
+                            value=f"{clean_data_hnk_geral()[3]:.2f}%",
                             delta="📈"
                         ) 
                         style_metric_cards()
+            
+            with tabs[1]:
+                st.markdown("<h1 style='text-align: center;color: green;' >Resumo Mensal</h1>", unsafe_allow_html=True)
+                col1, col2, col3 = st.columns([8,8,8])   
+                df_cidades_posi = clean_data_hnk_mes()[1]
+                df_produtos_posi= clean_data_hnk_mes()[0]
+                df_vendedores_posi = clean_data_hnk_mes()[2]
+                
+                with col1:
+                    
+                    st.write("## Análise Produtos")
+                    st.dataframe(df_produtos_posi)
+                    st.divider()
+
+                with col2:
+                    st.write("## Análise Vendedores")
+                    st.dataframe(df_vendedores_posi)
+                    st.divider()
+
+
+                with col3:
+                    st.write("## Análise Cidades")
+                    st.dataframe(df_cidades_posi)
+                    st.divider()
+                    
+                
 
 
             
