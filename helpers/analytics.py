@@ -564,12 +564,7 @@ def clean_data_campari_p4p():
 
 
 def clean_data_MariaRita():
-    df = pd.read_excel("relatorios\\TEMPLATE_KA_MARIA.xlsx")
-
-    df_sem_primeira_linha = df.drop(index=0)
-    novos_nomes_colunas = df_sem_primeira_linha.iloc[0]
-    df_sem_primeira_linha.columns = novos_nomes_colunas
-    df_final = df_sem_primeira_linha[1:].reset_index(drop=True)
+    df_final = pd.read_excel("relatorios\\TEMPLATE_KA_MARIA.xlsx")
 
     # mapeando colunas: 
     mapeamento_produtos = {
